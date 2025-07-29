@@ -35,7 +35,7 @@ app.post('/generate', async (req, res) => {
       ],
       generationConfig: {
         temperature: 1,
-        maxOutputTokens: 512,
+        maxOutputTokens: 1080,
         candidateCount: 1
       }
     };
