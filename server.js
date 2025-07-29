@@ -19,7 +19,8 @@ app.post('/generate', async (req, res) => {
   }
 
   try {
-    const model = 'gemini-1.5-flash'; // Or 'gemini-1.5-pro', 'gemini-pro', etc. Choose the model you intend to use.
+    // *** FIX IS HERE: Changed model to 'gemini-2.5-flash' ***
+    const model = 'gemini-2.5-flash'; // Now using Gemini 2.5 Flash
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${API_KEY}`;
 
     const requestBody = {
@@ -41,15 +42,12 @@ app.post('/generate', async (req, res) => {
 
     const response = await axios.post(url, requestBody);
 
-    // The response structure for text generation is usually candidates[0].content.parts[0].text
     const reply = response.data.candidates?.[0]?.content?.parts?.[0]?.text || "No response generated.";
     res.json({ reply });
 
   } catch (err) {
     console.error("Error calling Gemini API:");
     if (err.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
       console.error("Response data:", err.response.data);
       console.error("Response status:", err.response.status);
       console.error("Response headers:", err.response.headers);
@@ -58,11 +56,9 @@ app.post('/generate', async (req, res) => {
         details: err.response.data
       });
     } else if (err.request) {
-      // The request was made but no response was received
       console.error("No response received:", err.request);
       res.status(500).json({ error: "No response from Gemini API. Network error or API down." });
     } else {
-      // Something happened in setting up the request that triggered an Error
       console.error("Error message:", err.message);
       res.status(500).json({ error: "An unexpected error occurred.", details: err.message });
     }
