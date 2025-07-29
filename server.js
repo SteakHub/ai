@@ -22,11 +22,12 @@ app.post('/generate', async (req, res) => {
           text: prompt
         },
         temperature: 1,
-        maxOutputTokens: 512
+        maxOutputTokens: 512,
+        candidateCount: 1
       }
     );
 
-    const reply = response.data.candidates?.[0]?.output || "No response";
+    const reply = response.data.candidates?.[0]?.content?.text || "No response";
     res.json({ reply });
   } catch (err) {
     console.error(err.response?.data || err.message);
